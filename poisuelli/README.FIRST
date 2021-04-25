@@ -1,0 +1,51 @@
+#How to run me:
+
+
+
+#To clean the directory, this is optional
+
+foamCleanTutorials
+
+
+
+#To generate the mesh and check mesh quality
+
+blockMesh
+
+checkMesh
+
+
+
+# To run in serial:
+
+simpleFoam > log | tail -f log
+
+
+
+#To do some sampling
+
+postProcess -func sampleDict -latestTime 
+
+
+
+#After doing the sampling remember to change the gnuplot script to get
+#the data from the right directory
+gnuplot gnuplot/gnuplot_script
+
+
+
+# Visualization
+
+paraFoam
+
+
+
+
+#NOTE0:
+
+#In the file laminar_pipe.ipynb you will find a jupyter notebook (ipython), to plot the analytical vs. the numerical solution.
+
+
+#NOTE1:
+#modifyMesh will modify the mesh to gt a bad quality one. 
+#Then try to run the solver and compare solutions.
