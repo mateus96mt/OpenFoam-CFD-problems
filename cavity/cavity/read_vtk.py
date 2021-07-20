@@ -101,11 +101,24 @@ def error(y_num, y_referencia):
         
     return np.sqrt(erro/sum_exata)
 
+def lastVTKname(malha = '32x32'):
+    
+    if malha == '32x32':
+        return '9000'
+    
+    if malha == '64x64':
+        return '19000'
+    
+    if malha == '128x128':
+        return '38000'
+
 def run():
     #scheme_nameS = ['linear', 'TOPUS', 'FSFL', 'SDPUS', 'EPUS']
     scheme_nameS = ['TOPUS', 'FSFL', 'SDPUS', 'EPUS']
 #    scheme_nameS = ['linear']
     ReS = [1000, 7500]
+    
+    malhas = ['32x32', '64x64', '128x128']
     
     plt.figure(figsize=(8,8))
     
@@ -116,50 +129,134 @@ def run():
         print("\n\nscheme_name = " + scheme_name)
         
         for Re in ReS:
+            
+            for malha in malhas:
         
-            path = 'Reynolds/' + str(Re) + '/' + scheme_name
-        
-            if scheme_name == 'linear':
+                path = 'Reynolds/' + str(Re) + '/malhas/' + malha + '/' + scheme_name
+            
+                if scheme_name == 'linear':
+                    
+                    path = 'linear'
+            
+                vtkFileName = path + '/VTK/' + scheme_name + '_' + lastVTKname(malha) + '.vtk'
+            
+                x_axes, y_axes, vel_x_center, vel_y_center = velAtCenter(fileName = vtkFileName)
                 
-                path = 'linear'
+                y_axes_ref, vel_U_ref = readOutPut('referencia/referencia_U_Re_' + str(Re) + '_128x128.txt')
+                x_axes_ref, vel_V_ref = readOutPut('referencia/referencia_V_Re_' + str(Re) + '_128x128.txt')
+                
+                
+                plt.plot(y_axes, vel_x_center, label = 'Solução numérica', marker = '+')
+                plt.plot(y_axes_ref, vel_U_ref, 'v', label = 'Referência')
+                plt.grid(True, linestyle='--')
+    #            plt.title(scheme_name)
+                plt.legend(loc="best")
+                plt.xlabel(r'$y$', fontsize=label_font_size)
+                plt.ylabel(r'$U_x$', fontsize=label_font_size, rotation=0)
+                plt.tight_layout()
+                plt.savefig(scheme_name + '_Re=' + str(Re) + '_' + malha + '_vel_x' + '.png', dpi = 200)
+                plt.cla()
+                plt.clf()
+                
+                plt.plot(x_axes, vel_y_center, label = 'Solução numérica', marker = '+')
+                plt.plot(x_axes_ref, vel_V_ref, 'v', label = 'Referência')
+                plt.grid(True, linestyle='--')
+    #            plt.title(scheme_name)
+                plt.legend(loc="best")
+                plt.xlabel(r'$x$', fontsize=label_font_size)
+                plt.ylabel(r'$U_y$', fontsize=label_font_size, rotation=0)
+                plt.tight_layout()
+                plt.savefig(scheme_name + '_Re=' + str(Re) + '_' + malha + '_vel_y' + '.png', dpi = 200)
+                plt.cla()
+                plt.clf()
+    
+                print("Re = " + str(Re) + "  malha: " + malha)
+                print("erro Ux: " + str("%.5f" % error(vel_x_center, vel_U_ref)))
+                print("erro Uy: " + str("%.5f" % error(vel_y_center, vel_V_ref)) + "\n")
+
+def run2():
+    #scheme_nameS = ['linear', 'TOPUS', 'FSFL', 'SDPUS', 'EPUS']
+    scheme_nameS = ['TOPUS', 'FSFL', 'SDPUS', 'EPUS']
+#    scheme_nameS = ['linear']
+    ReS = [1000, 7500]
+    
+    malhas = ['32x32', '64x64', '128x128']
+    
+    vels = ['_vel_x', '_vel_y']
+    
+    plt.figure(figsize=(8,8))
+    
+    label_font_size = 12
+    
+    for scheme_name in scheme_nameS:
         
-            x_axes, y_axes, vel_x_center, vel_y_center = velAtCenter(fileName = path + '/VTK/' + scheme_name + '_38000.vtk')
+        print("\n\nscheme_name = " + scheme_name)
+        
+        for Re in ReS:
             
-            y_axes_ref, vel_U_ref = readOutPut('referencia/referencia_U_Re_' + str(Re) + '_128x128.txt')
-            x_axes_ref, vel_V_ref = readOutPut('referencia/referencia_V_Re_' + str(Re) + '_128x128.txt')
+            for vel in vels:
             
+                plot_analy = True
+                
+                for malha in malhas:
+                    
+                    path = 'Reynolds/' + str(Re) + '/malhas/' + malha + '/' + scheme_name
             
-            plt.plot(y_axes, vel_x_center, label = 'Solução numérica', marker = '+')
-            plt.plot(y_axes_ref, vel_U_ref, 'v', label = 'Referência')
-            plt.grid(True, linestyle='--')
-#            plt.title(scheme_name)
-            plt.legend(loc="best")
-            plt.xlabel(r'$y$', fontsize=label_font_size)
-            plt.ylabel(r'$U_x$', fontsize=label_font_size, rotation=0)
-            plt.tight_layout()
-            plt.savefig(scheme_name + '_Re=' + str(Re) + '_vel_x' + '.png', dpi = 200)
-            plt.cla()
-            plt.clf()
+                    if scheme_name == 'linear':
+                        
+                        path = 'linear'
             
-            plt.plot(x_axes, vel_y_center, label = 'Solução numérica', marker = '+')
-            plt.plot(x_axes_ref, vel_V_ref, 'v', label = 'Referência')
-            plt.grid(True, linestyle='--')
-#            plt.title(scheme_name)
-            plt.legend(loc="best")
-            plt.xlabel(r'$x$', fontsize=label_font_size)
-            plt.ylabel(r'$U_y$', fontsize=label_font_size, rotation=0)
-            plt.tight_layout()
-            plt.savefig(scheme_name + '_Re=' + str(Re) + '_vel_y' + '.png', dpi = 200)
-            plt.cla()
-            plt.clf()
+                    vtkFileName = path + '/VTK/' + scheme_name + '_' + lastVTKname(malha) + '.vtk'
+                
+                    x_axes, y_axes, vel_x_center, vel_y_center = velAtCenter(fileName = vtkFileName)
+                    
+                    y_axes_ref, vel_U_ref = readOutPut('referencia/referencia_U_Re_' + str(Re) + '_128x128.txt')
+                    x_axes_ref, vel_V_ref = readOutPut('referencia/referencia_V_Re_' + str(Re) + '_128x128.txt')
+                    
+                    if vel == '_vel_x':
+                        
+                        if plot_analy:
+                            plt.plot(y_axes_ref, vel_U_ref, 'v', label = 'Referência')
+                            plot_analy = False
+                        
+                        plt.plot(y_axes, vel_x_center, label = malha, marker = '')
+#                        plt.plot(y_axes_ref, vel_U_ref, 'v', label = malha)
+                        plt.grid(True, linestyle='--')
+            #            plt.title(scheme_name)
+                        plt.legend(loc="best")
+                        plt.xlabel(r'$y$', fontsize=label_font_size)
+                        plt.ylabel(r'$U_x$', fontsize=label_font_size, rotation=0)
+                        plt.tight_layout()
+                    else:
+                        
+                        if plot_analy:
+                            plt.plot(x_axes_ref, vel_V_ref, 'v', label = 'Referência')
+                            plot_analy = False
+                            
+                        plt.plot(x_axes, vel_y_center, label = malha, marker = '')
+#                        plt.plot(x_axes_ref, vel_V_ref, 'v', label = malha)
+                        plt.grid(True, linestyle='--')
+            #            plt.title(scheme_name)
+                        plt.legend(loc="best")
+                        plt.xlabel(r'$x$', fontsize=label_font_size)
+                        plt.ylabel(r'$U_y$', fontsize=label_font_size, rotation=0)
+                        plt.tight_layout()
+            
+                    print("Re = " + str(Re) + "  malha: " + malha)
+                    print("erro Ux: " + str("%.5f" % error(vel_x_center, vel_U_ref)))
+                    print("erro Uy: " + str("%.5f" % error(vel_y_center, vel_V_ref)) + "\n")
+                        
+                if vel == '_vel_x':
+                    plt.savefig(scheme_name + '_Re=' + str(Re) + '_' + 'MALHAS' + '_vel_x' + '.png', dpi = 200)
+                    plt.cla()
+                    plt.clf()
+                else:
+                    plt.savefig(scheme_name + '_Re=' + str(Re) + '_' + 'MALHAS' + '_vel_y' + '.png', dpi = 200)
+                    plt.cla()
+                    plt.clf()
 
-            print("Re = " + str(Re))
-            print("erro Ux: " + str("%.5f" % error(vel_x_center, vel_U_ref)))
-            print("erro Uy: " + str("%.5f" % error(vel_y_center, vel_V_ref)) + "\n")
-            
 
-
-run()
+run2()
 
 #x_axes_ref, vel_U_ref = readOutPut('referencia/referencia_U_Re_1000_128x128.txt')
 #
