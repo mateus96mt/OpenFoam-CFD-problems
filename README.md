@@ -10,7 +10,7 @@ Os comandos devem ser executados dentro da raiz em qualquer pasta 'TOPUS', 'FSFL
 
 Para rodar os problemas basta dois passos:
 
-### 1. Geração de malhar através do comando ```blockMesh```
+### 1. Geração de malha através do comando ```blockMesh```
 
 ### 2. Execução do solver ```icoFoam```
 
