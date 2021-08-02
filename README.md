@@ -12,7 +12,11 @@ Para rodar os problemas basta dois passos:
 
 ### 1. Geração de malha através do comando ```blockMesh```
 
-### 2. Execução do solver ```icoFoam```
+### 2. Execução do solver 
+
+- Problema da cavidade: ```icoFoam```
+- Problema de Poisuelli ```simpleFoam```
+- Problema do degrau ```simpleFoam```
 
 A partir dos resultados pode-se gerar os arquivos ".VTK"
 
