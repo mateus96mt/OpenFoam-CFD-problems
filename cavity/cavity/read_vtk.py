@@ -10,24 +10,34 @@ import pyvista as vtki
 import numpy as np
 import matplotlib.pyplot as plt
 
-def readOutPut(fileName):
+def readReferenceData():
     
-    x_axes = []
-    vel = []
+    fileVelX = open('referencia/vel_x_all_reynolds.txt', 'r', encoding="utf-8")
+    fileVelY = open('referencia/vel_y_all_reynolds.txt', 'r', encoding="utf-8")
     
-    file = open(fileName, 'r')
-    
-    str_file = file.readlines()
+    linesVelX = [line.split('\n')[0] for line in fileVelX.readlines()]
+    linesVelY = [line.split('\n')[0] for line in fileVelY.readlines()]
         
-    for i in range(len(str_file)):
+    columnsVelX = np.array([line.split(' ') for line in linesVelX[1:]])
+    columnsVelY = np.array([line.split(' ') for line in linesVelX[1:]])
     
-        str_lines = str_file[i].split('\n')
-        str_lines = str_lines[0].split(' ')
-                
-        x_axes.append(float(str_lines[0]))
-        vel.append(float(str_lines[1]))
     
-    return x_axes, vel
+    headersVelX = linesVelX[0].split(' ')
+    headersVelY = linesVelY[0].split(' ')    
+    
+    velX = {headersVelX[i]:list(columnsVelX[:,i]) for i in range(len(headersVelX))}
+    velY = {headersVelY[i]:list(columnsVelY[:,i]) for i in range(len(headersVelY))}
+    
+    
+#    print(test['2500'])
+    
+#    velX = {header for header in headersVelX}
+#    velY = {header for header in headersVelY}
+#    
+#    print(velX)
+#    print(velY)
+    
+    return velX, velY
 
 def velAtCenter(fileName = 'VTK/linear_38000.vtk'):
     
@@ -37,7 +47,7 @@ def velAtCenter(fileName = 'VTK/linear_38000.vtk'):
     ## point-wise information of geometry is contained
     #print("grid.points:\n\n", grid.points, "\n\n")
     #
-    ### get a dictionary contains all cell/point information
+    ### get a dictionary contains all cell/point informationfile
     #print("grid.cell_arrays:\n\n", grid.cell_arrays, "\n\n") # note that cell-based and point-based are in different size
     #print("grid.point_arrays:\n\n", grid.point_arrays, "\n\n") # 
     #
@@ -142,9 +152,12 @@ def run():
             
                 x_axes, y_axes, vel_x_center, vel_y_center = velAtCenter(fileName = vtkFileName)
                 
-                y_axes_ref, vel_U_ref = readOutPut('referencia/referencia_U_Re_' + str(Re) + '_128x128.txt')
-                x_axes_ref, vel_V_ref = readOutPut('referencia/referencia_V_Re_' + str(Re) + '_128x128.txt')
+#                y_axes_ref, vel_U_ref = readOutPut('referencia/referencia_U_Re_' + str(Re) + '_128x128.txt')
+#                x_axes_ref, vel_V_ref = readOutPut('referencia/referencia_V_Re_' + str(Re) + '_128x128.txt')
                 
+                velX, velY = readReferenceData()
+                y_axes_ref, vel_U_ref = velX['y'], velX[str(Re)]
+                x_axes_ref, vel_V_ref = velY['x'], velY[str(Re)]
                 
                 plt.plot(y_axes, vel_x_center, label = 'Solução numérica', marker = '+')
                 plt.plot(y_axes_ref, vel_U_ref, 'v', label = 'Referência')
@@ -210,8 +223,12 @@ def run2():
                 
                     x_axes, y_axes, vel_x_center, vel_y_center = velAtCenter(fileName = vtkFileName)
                     
-                    y_axes_ref, vel_U_ref = readOutPut('referencia/referencia_U_Re_' + str(Re) + '_128x128.txt')
-                    x_axes_ref, vel_V_ref = readOutPut('referencia/referencia_V_Re_' + str(Re) + '_128x128.txt')
+#                    y_axes_ref, vel_U_ref = readOutPut('referencia/referencia_U_Re_' + str(Re) + '_128x128.txt')
+#                    x_axes_ref, vel_V_ref = readOutPut('referencia/referencia_V_Re_' + str(Re) + '_128x128.txt')
+                    
+                    velX, velY = readReferenceData()
+                    y_axes_ref, vel_U_ref = velX['y'], velX[str(Re)]
+                    x_axes_ref, vel_V_ref = velY['x'], velY[str(Re)]
                     
                     if vel == '_vel_x':
                         
@@ -256,7 +273,14 @@ def run2():
                     plt.clf()
 
 
-run2()
+#velX, velY = readReferenceData()
+#
+#print(velX)
+#print(velY)
+
+run()
+
+#run2()
 
 #x_axes_ref, vel_U_ref = readOutPut('referencia/referencia_U_Re_1000_128x128.txt')
 #
