@@ -408,7 +408,6 @@ def run4():
 #                print(velY)
 #                print('\n\n\n')
 #                
-        
                 erroVelx = error(vel_x_center, vel_U_ref)
                 erroVely = error(vel_y_center, vel_V_ref)
                 
@@ -419,20 +418,22 @@ def run4():
                 errosVelX.append(erroVelx)
                 errosVelY.append(erroVely)
             
+            reys = [float(re/1000.0) for re in ReS]
+            
+            plt.xticks(reys, reys)
+            
             if vel == '_vel_x':
-                
-                plt.plot(ReS, errosVelX, label = scheme_name, marker = markers[scheme_index])
+                plt.plot(reys, errosVelX, label = scheme_name, marker = markers[scheme_index])
             
             else:
-            
-                plt.plot(ReS, errosVelY, label = scheme_name, marker = markers[scheme_index])
+                plt.plot(reys, errosVelY, label = scheme_name, marker = markers[scheme_index])
             
             scheme_index = scheme_index + 1;
             
         plt.grid(True, linestyle='--')
 #            plt.title(scheme_name)
         plt.legend(loc="best")
-        plt.xlabel('Reynolds', fontsize=label_font_size)
+        plt.xlabel('Reynolds x 1000', fontsize=label_font_size)
         plt.ylabel(r'$||E||_2$', fontsize=label_font_size, rotation=0)
         plt.tight_layout()
         
@@ -441,7 +442,89 @@ def run4():
         plt.cla()
         plt.clf()
 
+def run5():
+    #scheme_nameS = ['linear', 'TOPUS', 'FSFL', 'SDPUS', 'EPUS']
+    scheme_nameS = ['TOPUS', 'FSFL', 'SDPUS', 'EPUS']
+    markers = ['v', 's', '+', '*']
+#    scheme_nameS = ['linear']
+    ReS = [1000, 7500]
+    
+    malhas = ['32x32', '64x64', '128x128']
+    
+    mesh = [32, 64, 128]
+    
+    vels = ['_vel_x', '_vel_y']
+    
+    plt.figure(figsize=(8,8))
+    
+    label_font_size = 12
+    
+    for Re in ReS:
+        
+        print("\n\Re = " + str(Re))
+        
+        for vel in vels:
+        
+            markerIndex = 0
+            for scheme_name in scheme_nameS:
+                
+                errosVelx = []
+                errosVely = []
+                
+                for malha in malhas:
+                    
+                    path = 'Reynolds/' + str(Re) + '/malhas/' + malha + '/' + scheme_name
+            
+                    if scheme_name == 'linear':
+                        
+                        path = 'linear'
+            
+                    vtkFileName = path + '/VTK/' + scheme_name + '_' + lastVTKname(malha) + '.vtk'
+                
+                    x_axes, y_axes, vel_x_center, vel_y_center = velAtCenter(fileName = vtkFileName)
+                    
+#                    y_axes_ref, vel_U_ref = readOutPut('referencia/referencia_U_Re_' + str(Re) + '_128x128.txt')
+#                    x_axes_ref, vel_V_ref = readOutPut('referencia/referencia_V_Re_' + str(Re) + '_128x128.txt')
+                    
+                    velX, velY = readReferenceData()
+                    y_axes_ref, vel_U_ref = velX['y'], velX[str(Re)]
+                    x_axes_ref, vel_V_ref = velY['x'], velY[str(Re)]
+            
+                    errX = error(vel_x_center, vel_U_ref)
+                    errY = error(vel_y_center, vel_V_ref)
+            
+                    print("Re = " + str(Re) + "  malha: " + malha)
+                    print("erro Ux: " + str("%.5f" % errX))
+                    print("erro Uy: " + str("%.5f" % errY) + "\n")
+                    
+                    errosVelx.append(errX)
+                    errosVely.append(errY)
+                                        
+                        
+                if vel == '_vel_x':
+                    plt.xticks(mesh, mesh)
+                    plt.plot(mesh, errosVelx, label = scheme_name, marker = markers[markerIndex])
+                    
+                else:
+                    plt.xticks(mesh, mesh)
+                    plt.plot(mesh, errosVely, label = scheme_name, marker = markers[markerIndex])
+                    
+                plt.grid(True, linestyle='--')
+    #            plt.title(scheme_name)
+                plt.legend(loc="best")
+                plt.xlabel('Malha', fontsize=label_font_size)
+                plt.ylabel(r'$||E||_2$', fontsize=label_font_size, rotation=0)
+                plt.tight_layout()
+                
+                
+                markerIndex = markerIndex + 1
+                
+            plt.savefig('error_meshes' + '_Re=' + str(Re) + '_' + 'MALHAS' + str(vel) + '.png', dpi = 200)
+            plt.cla()
+            plt.clf()
+
 run4()
+run5()
 
 #print(velX)
 #print(velY)
