@@ -460,9 +460,7 @@ def run5():
     label_font_size = 12
     
     for Re in ReS:
-        
-        print("\n\Re = " + str(Re))
-        
+                
         for vel in vels:
         
             markerIndex = 0
@@ -493,7 +491,7 @@ def run5():
                     errX = error(vel_x_center, vel_U_ref)
                     errY = error(vel_y_center, vel_V_ref)
             
-                    print("Re = " + str(Re) + "  malha: " + malha)
+                    print("Re = " + str(Re) + "  " + scheme_name + "  malha: " + malha)
                     print("erro Ux: " + str("%.5f" % errX))
                     print("erro Uy: " + str("%.5f" % errY) + "\n")
                     
@@ -523,7 +521,7 @@ def run5():
             plt.cla()
             plt.clf()
 
-run4()
+#run4()
 run5()
 
 #print(velX)
