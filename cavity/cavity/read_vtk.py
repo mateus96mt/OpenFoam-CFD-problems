@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 
 def readReferenceData():
     
-    fileVelX = open('referencia/vel_x_all_reynolds.txt', 'r')
-    fileVelY = open('referencia/vel_y_all_reynolds.txt', 'r')
+    fileVelX = open('referencia/E.Erturk_T.C.Corke_2005/vel_x_all_reynolds.txt', 'r')
+    fileVelY = open('referencia/E.Erturk_T.C.Corke_2005/vel_y_all_reynolds.txt', 'r')
     
     linesVelX = [line.split('\n')[0] for line in fileVelX.readlines()]
     linesVelY = [line.split('\n')[0] for line in fileVelY.readlines()]
@@ -24,8 +24,8 @@ def readReferenceData():
     headersVelX = linesVelX[0].split(' ')
     headersVelY = linesVelY[0].split(' ')    
     
-    velX = {headersVelX[i]:list(columnsVelX[:,i]) for i in range(len(headersVelX))}
-    velY = {headersVelY[i]:list(columnsVelY[:,i]) for i in range(len(headersVelY))}
+    velX = {headersVelX[i]:list(np.flip(columnsVelX[:,i])) for i in range(len(headersVelX))}
+    velY = {headersVelY[i]:list(np.flip(columnsVelY[:,i])) for i in range(len(headersVelY))}
     
     
 #    print(test['2500'])
@@ -522,7 +522,14 @@ def run5():
             plt.clf()
 
 #run4()
+#run5()
+run()
+run2()
+run3()
+run4()
 run5()
+
+
 
 #print(velX)
 #print(velY)
