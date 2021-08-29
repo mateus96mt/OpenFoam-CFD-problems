@@ -1,1 +1,2 @@
-icoFoam | grep 'Solving for Uy, Initial residual =' | awk -F"," {'tol=1e-3;it=it+1;split($2,a,"=");print "it: " it "   residual: " a[2];if(a[2] > 0 && a[2]<tol){print "Minimal residual reached! Ending execution...";exit 1;}}';
+https://www.cfd-online.com/Forums/openfoam-solving/117484-initial-residual-final-residual.html
+blockMesh;icoFoam | grep 'Solving for Uy, Initial residual =' | awk -F"," {'tol=1e-5;it=it+1;split($2,a,"=");print "it: " it "   residual: " a[2];if(a[2] > 0 && a[2]<tol){print "Minimal residual reached! Ending execution...";exit 1;}}';
