@@ -1,3 +1,7 @@
+## README Translation
+- [English](README.md)
+- [Portuguese](README-pt.md)
+
 # Instruções
 
 ## Para utilizar este repositório é necessário instalar o OpenFoam em sua máquina bem como os esquemas TOPUS, FSFL, SDPUS-C1 e EPUS.
