@@ -1,24 +1,27 @@
-# Instruções
+## README Translation
+- [English](README.md)
+- [Portuguese](README-pt.md)
 
-## Para utilizar este repositório é necessário instalar o OpenFoam em sua máquina bem como os esquemas TOPUS, FSFL, SDPUS-C1 e EPUS.
+# Instructions
 
-Siga o tutorial a seguir para instalação do OpenFoam e dos limitadores de fluxo antes de continuar: [Tutorial] (https://github.com/mateus96mt/openFoamFluxLimiters)
+## To use this repository it is necessary to install OpenFoam on your machine as well as the TOPUS, FSFL, SDPUS-C1 and EPUS schemas.
 
-Após seguir o tutorial acima e com o OpenFoam instalado e os limitadores de fluxo TOPUS, FSFL, SDPUS-C1 e EPUS, prossiga para os próximos passos.
+Please follow the following tutorial for installing OpenFoam and Flow Limiters before proceeding: [Tutorial] (https://github.com/mateus96mt/openFoamFluxLimiters)
 
-Os comandos devem ser executados dentro da raiz em qualquer pasta 'TOPUS', 'FSFL', 'SDPUS' ou 'EPUS'.
+After following the tutorial above and with OpenFoam installed and the TOPUS, FSFL, SDPUS-C1 and EPUS flow limiters, proceed to the next steps.
 
-Para rodar os problemas basta dois passos:
+The commands must be run inside the root in any 'TOPUS', 'FSFL', 'SDPUS' or 'EPUS' folder.
 
-### 1. Geração de malha através do comando ```blockMesh```
+To run the problems just two steps:
 
-### 2. Execução do solver 
+### 1. Mesh generation using the ```blockMesh``` command
 
-- Problema da cavidade: ```icoFoam```
-- Problema de Poisuelli ```simpleFoam```
-- Problema do degrau ```simpleFoam```
+### 2. Execution of the solver
 
-A partir dos resultados pode-se gerar os arquivos ".VTK"
+- Cavity problem: ```icoFoam```
+- Poisuelli problem ```simpleFoam```
+- ```simpleFoam``` step problem
 
-Basta rodar o comando ```foamToVTK```
+From the results it is possible to generate the files ".VTK"
 
+Just run the command ```foamToVTK```
